@@ -16,8 +16,35 @@ long add_serial(const char *numbers) {
 }
 
 long add_parallel(const char *numbers) {
-    long sum = 0;
+    long sum = 0, my_sum = 0;
+    int numThreads = omp_get_max_threads();
+    long n = Num_To_Add / numThreads; // Number of elements to compute
+    int id;
+    long start, stop;
 
+
+#pragma omp parallel num_threads(omp_get_max_threads()) private(id, start, stop)// This block of code will be using parallelization
+    {
+        id = omp_get_thread_num();
+
+        start = id * n, stop; // Starting and stopping point for each thread
+        if(id != (numThreads - 1)) {
+            stop = start + n - 1;
+        }
+        else {
+            stop = Num_To_Add - 1;
+        }
+        printf("Start %d\n", start);
+        printf("Stop %d\n", stop);
+#pragma omp for
+        for (long i = start; i < stop; i++) {
+            my_sum += numbers[i];
+//            sum += numbers[i];
+        }
+        sum += my_sum;
+        printf("Local Sum from Thread %d: %d\n", id, my_sum);
+        my_sum = 0;
+    }
     return sum;
 }
 
