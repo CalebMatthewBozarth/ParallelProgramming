@@ -7,6 +7,7 @@
 static const long Num_To_Add = 1000000000;
 static const double Scale = 10.0 / RAND_MAX;
 
+// Adds up each element of the numbers array serial
 long add_serial(const char *numbers) {
     long sum = 0;
     for (long i = 0; i < Num_To_Add; i++) {
@@ -15,35 +16,26 @@ long add_serial(const char *numbers) {
     return sum;
 }
 
+// Adds up each element of the numbers array in parallel
 long add_parallel(const char *numbers) {
-    long sum = 0, my_sum = 0;
-    int numThreads = omp_get_max_threads();
+    long sum = 0;
+    int numThreads = omp_get_max_threads(); // Number of threads
     long n = Num_To_Add / numThreads; // Number of elements to compute
-    int id;
-    long start, stop;
+    long i; // i index variable to be declared as private for each thread
+    int thread_num; // used as a private variable for each thread
+    int start, stop; // start / stop used for chunking up the array into different parts
 
 
-#pragma omp parallel num_threads(omp_get_max_threads()) private(id, start, stop)// This block of code will be using parallelization
+#pragma omp parallel num_threads(omp_get_max_threads()) private(i, thread_num, start, stop) reduction(+: sum) // This block of code will be using parallelization with private variables for each thread
     {
-        id = omp_get_thread_num();
+        thread_num = omp_get_thread_num(); // Thread number
+        start = thread_num * n; // Start point for this thread
+        stop = (thread_num + 1) * n; // Stopping point for this thread
 
-        start = id * n, stop; // Starting and stopping point for each thread
-        if(id != (numThreads - 1)) {
-            stop = start + n - 1;
+// For loop to go through the chunk allocated to each thread
+        for (i = start; i < stop; i++) {
+            sum += numbers[i];
         }
-        else {
-            stop = Num_To_Add - 1;
-        }
-        printf("Start %d\n", start);
-        printf("Stop %d\n", stop);
-#pragma omp for
-        for (long i = start; i < stop; i++) {
-            my_sum += numbers[i];
-//            sum += numbers[i];
-        }
-        sum += my_sum;
-        printf("Local Sum from Thread %d: %d\n", id, my_sum);
-        my_sum = 0;
     }
     return sum;
 }
