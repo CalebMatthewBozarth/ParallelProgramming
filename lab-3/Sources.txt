@@ -1,0 +1,3 @@
+I looked up a resource on how to parallelize nested for loops. This is my resource down below.
+
+https://stackoverflow.com/questions/13357065/how-does-openmp-handle-nested-loops
