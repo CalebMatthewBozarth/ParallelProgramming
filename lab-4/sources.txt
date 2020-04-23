@@ -1,0 +1,5 @@
+Sources:
+
+https://www.geeksforgeeks.org/quick-sort/
+
+I used this source for the sequential algorithm, and then parallelized it from there.
