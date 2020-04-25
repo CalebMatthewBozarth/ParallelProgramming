@@ -6,8 +6,8 @@
 #include <sys/time.h>
 #include <memory.h>
 
-static const long Num_To_Sort = 1000000000;
-//static const long Num_To_Sort = 10;
+//static const long Num_To_Sort = 1000000000;
+static const long Num_To_Sort = 100000000;
 
 // Swap two array elements
 void swap(int *a, int *b) {
@@ -60,9 +60,9 @@ void sort_p(int *arr, int low, int high) {
 
         // Place each recursive function call in its own task
 #pragma omp task
-        sort_p(arr, low, pi - 1); // Before pivot index is one task
+        sort_s(arr, low, pi - 1); // Before pivot index is one task
 #pragma omp task
-        sort_p(arr, pi + 1, high); // After pivot index is another task
+        sort_s(arr, pi + 1, high); // After pivot index is another task
     }
 }
 
