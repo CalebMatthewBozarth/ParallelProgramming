@@ -5,6 +5,8 @@
 #include <time.h>
 #include <sys/time.h>
 
+const int CHUNK = 100;
+
 typedef struct Complex {
     long double real;
     long double imaginary;
@@ -79,7 +81,7 @@ int main(int argc, const char **argv) {
 
 #pragma omp parallel num_threads(omp_get_max_threads()) // This block of code will be using parallelization
     {
-#pragma omp for collapse(2)
+#pragma omp for collapse(2) schedule(dynamic, CHUNK)
         for (int img_y = 0; img_y < Image_Height; img_y++) {
             for (int img_x = 0; img_x < Image_Width; img_x++) {
                 // Find the value of C in the Mandelbrot range corresponding to this pixel

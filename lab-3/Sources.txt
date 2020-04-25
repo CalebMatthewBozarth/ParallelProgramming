@@ -1,3 +1,9 @@
+Sources:
+
 I looked up a resource on how to parallelize nested for loops. This is my resource down below.
 
 https://stackoverflow.com/questions/13357065/how-does-openmp-handle-nested-loops
+
+I found a PDF that went over a few scheduling options for OpenMP. It is listed below
+
+http://www.inf.ufsc.br/~bosco.sobral/ensino/ine5645/OpenMP_Dynamic_Scheduling.pdf
